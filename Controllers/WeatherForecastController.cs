@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.FileSystemGlobbing;
+using System;
 
 namespace ReadRequestBodyASPNETCoreWebAPI.Controllers
 {
@@ -31,6 +33,29 @@ namespace ReadRequestBodyASPNETCoreWebAPI.Controllers
             var requestBodySecond = await Request.Body.ReadAsStringAsync();
             return Ok($"First: {requestBody}, Second:{requestBodySecond}");
         }
+        [HttpPost("read-multiple-enable-buffering")]
+        public async Task<IActionResult> ReadMultipleEnableBuffering()
+        {
+            Request.EnableBuffering();
+            var requestBody = await Request.Body.ReadAsStringAsync(true);
+            Request.Body.Position = 0;
+            var requestBodySecond = await Request.Body.ReadAsStringAsync();
+            return Ok($"First: {requestBody}, Second:{requestBodySecond}");
+        }
+        [HttpPost("read-from-body")]
+        public IActionResult ReadFromBody([FromBody] PersonItemDto model)
+        {
+            var message = $"Person Data => Name: {model.Name}, Age: {model.Age}";
+            return Ok(message);
+        }
+        [HttpPost("read-from-body-multi-param")]
+        public IActionResult ReadFromBodyMultiParam([FromBody] PersonItemDto model, [FromBody] decimal salary)
+        {
+            var message = $"Person Data => Name: {model.Name}, Age: {model.Age}, Salary: {salary}";
+            return Ok(message);
+        }
+        //In simple terms, this exception notifies us that the FromBody attribute is permitted only once in action method parameters.
+        //    Hence, it is advisable to gather all parameters within a single request model parameter.
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
@@ -51,5 +76,10 @@ namespace ReadRequestBodyASPNETCoreWebAPI.Controllers
             var bodyAsString = await reader.ReadToEndAsync();
             return bodyAsString;
         }
+    }
+    public class PersonItemDto
+    {
+        public string Name { get; set; }
+        public int Age { get; set; }
     }
 }
