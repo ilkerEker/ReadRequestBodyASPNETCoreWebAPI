@@ -1,6 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileSystemGlobbing;
 using System;
+
+//https://code-maze.com/working-with-asp-net-core-middleware/  sayfasından çalışıldı
 
 namespace ReadRequestBodyASPNETCoreWebAPI.Controllers
 {
