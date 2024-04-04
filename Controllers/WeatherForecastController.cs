@@ -56,6 +56,16 @@ namespace ReadRequestBodyASPNETCoreWebAPI.Controllers
         }
         //In simple terms, this exception notifies us that the FromBody attribute is permitted only once in action method parameters.
         //    Hence, it is advisable to gather all parameters within a single request model parameter.
+
+        /********Using a Custom Attribute to Read the Request Body******/
+        [ReadRequestBody]
+        public IActionResult ReadFromAttribute()
+        {
+            var requestBody = Request.Headers["ReadRequestBodyAttribute"];
+            var message = $"Request Body From Attribute : {requestBody}";
+            return Ok(message);
+        }
+        /********Using a Custom Attribute to Read the Request Body******/
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
